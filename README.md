@@ -4,6 +4,11 @@ The official Tensorflow implementation is [here](https://github.com/google-resea
 
 This code is only available in FixMatch (RandAugment).
 
+
+
+
+
+
 ## Results
 
 ### CIFAR10
@@ -71,3 +76,23 @@ tensorboard --logdir=<your out_dir>
     year={2020},
 }
 ```
+
+## Implements
+I forked it from kekmodel/FixMatch-pytorch. 
+### Implement detail:
+| Item | description |
+|:---:|:---:|
+|GPU | nvidia GeForce RTX 3090 |
+|OS | Windows 10|
+| DL. framework | torchvision 0.11.0 |
+
+### Implement result (performance on CIFAR10 with 4000 #Labels):
+    - top-1 acc: 95.62
+    - top-5 acc: 99.94
+    - Best top-1 acc: 95.78
+    - Mean top-1 acc: 95.49
+    
+### deBug :))
+- RuntimeError: "nll_loss_forward_reduce_cuda_kernel_2d_index" not implemented for 'Int'
+    - We should add with `targets_x = targets_x.to(torch.int64)` in `train.py` lines 369: `Lx = F.cross_entropy(logits_x, targets_x, reduction='mean')`
+    
