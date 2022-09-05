@@ -355,7 +355,19 @@ def train(args, labeled_trainloader, unlabeled_trainloader, test_loader,
             logits_u_w, logits_u_s = logits[batch_size:].chunk(2)
             del logits
 
+            #print(logits_x)
+
+
+            #print(targets_x)
+            targets_x = targets_x.to(torch.int64)
+            """
+            :error with it..RuntimeError: "nll_loss_forward_reduce_cuda_kernel_2d_index" not implemented for 'Int'
+            Hence, should add with targets_x = targets_x.to(torch.int64)
+            and.. it can run successed
+            """
+
             Lx = F.cross_entropy(logits_x, targets_x, reduction='mean')
+            #print(Lx)
 
             pseudo_label = torch.softmax(logits_u_w.detach()/args.T, dim=-1)
             max_probs, targets_u = torch.max(pseudo_label, dim=-1)
